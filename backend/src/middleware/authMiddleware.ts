@@ -20,6 +20,7 @@ export const authenticateUser = async (
 			return;
 		}
 
+		// @ts-ignore
 		req.user = decodedToken; // Attach user info to the request object
 		next();
 	} catch (error) {

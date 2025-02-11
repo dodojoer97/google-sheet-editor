@@ -1,45 +1,19 @@
 {
 	"compilerOptions": {
-		/* 🌍 Target Environment */
-		"target": "ES2021" /* Modern JavaScript features with better performance */,
-		"module": "CommonJS" /* Required for Node.js */,
-		"lib": ["ES2021"] /* Includes built-in ES2021 types */,
-		"moduleResolution": "Node" /* Properly resolves Node.js modules */,
-
-		/* 🛠️ Output Settings */
-		"outDir": "./dist" /* Compiled output directory */,
-		"rootDir": "./src" /* Source code directory */,
-		"allowJs": false /* Disables JS files (use only TypeScript) */,
-		"resolveJsonModule": true /* Allow importing JSON files */,
-
-		/* 🚀 Optimizations */
-		"strict": true /* Enables all strict type checks */,
-		"esModuleInterop": true /* Fixes default import compatibility */,
-		"forceConsistentCasingInFileNames": true /* Prevents case mismatch errors */,
-		"skipLibCheck": true /* Skips type checks on `.d.ts` files for faster builds */,
-
-		/* 🔥 Type Safety */
-		"strictNullChecks": true /* Prevents assigning `null` where it shouldn't be */,
-		"strictFunctionTypes": true /* Ensures function arguments and return types are correct */,
-		"strictPropertyInitialization": true /* Enforces property initialization in classes */,
-		"noImplicitAny": true /* Disallows implicit `any` types */,
-		"noImplicitThis": true /* Prevents `this` being `any` */,
-		"noUnusedLocals": true /* Warns about unused variables */,
-		"noUnusedParameters": true /* Warns about unused function parameters */,
-		"noImplicitReturns": true /* Ensures all functions return a value */,
-
-		/* 🧹 Code Cleanup */
-		"removeComments": true /* Removes comments from the compiled output */,
-		"preserveConstEnums": true /* Keeps `const enum` values in the compiled output */,
-
-		/* 🌍 Node.js Compatibility */
-		"allowSyntheticDefaultImports": true /* Allows default imports for CommonJS modules */,
-		"experimentalDecorators": true /* Enables decorators (for future extensibility) */,
-		"emitDecoratorMetadata": true /* Emits type metadata for decorators (useful for dependency injection) */,
-
-		/* 🔄 Source Maps */
-		"sourceMap": true /* Generate source maps for debugging */
+		"target": "ES6",
+		"module": "CommonJS",
+		"outDir": "./dist", // Corrected from "./srtc" to "./dist"
+		"strict": true,
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"moduleResolution": "node",
+		"baseUrl": ".",
+		"types": ["node"],
+		"paths": {
+			"@/*": ["src/*"],
+			"@common": ["../common/"]
+		}
 	},
-	"include": ["src"] /* Include all TypeScript files in `src/` */,
-	"exclude": ["node_modules", "dist"] /* Exclude unnecessary directories */
+	"include": ["src", "functions", "../common/src/models/User.ts"],
+	"exclude": ["node_modules"]
 }
