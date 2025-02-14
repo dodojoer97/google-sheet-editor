@@ -1,4 +1,5 @@
 import { useState } from "react";
+import FirebaseAuthService from "../services/FirebaseAuthService";
 
 export default function JobForm() {
 	const [job, setJob] = useState({
@@ -15,9 +16,21 @@ export default function JobForm() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
-			const response = await fetch("http://localhost:5000/jobs", {
+			const user = FirebaseAuthService.getAuthInstance().currentUser;
+			if (!user) {
+				alert("You must be signed in to submit a job.");
+				return;
+			}
+
+			// Get Firebase Auth Token
+			const token = await user.getIdToken();
+
+			const response = await fetch("http://localhost:5000/sheets/add-job", {
 				method: "POST",
-				headers: { "Content-Type": "application/json" },
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
 				body: JSON.stringify(job),
 			});
 
