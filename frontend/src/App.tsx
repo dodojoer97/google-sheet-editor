@@ -1,29 +1,16 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import FirebaseAuthService from "./services/FirebaseAuthService";
-import { User, onAuthStateChanged } from "firebase/auth";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import GoogleAuthButton from "./components/GoogleAuthButton";
-import EditFormPage from "./pages/EditFormPage"; // Create this component
+import EditFormPage from "./pages/EditFormPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
-	const [user, setUser] = useState<User | null>(null);
-
-	useEffect(() => {
-		// Listen for authentication state changes
-		const unsubscribe = onAuthStateChanged(
-			FirebaseAuthService.getAuthInstance(),
-			(authUser) => {
-				setUser(authUser);
-			}
-		);
-		return () => unsubscribe();
-	}, []);
-
 	return (
 		<Router>
 			<Routes>
 				<Route path="/" element={<GoogleAuthButton />} />
-				<Route path="/edit" element={user ? <EditFormPage /> : <Navigate to="/" />} />
+				<Route element={<ProtectedRoute />}>
+					<Route path="/edit" element={<EditFormPage />} />
+				</Route>
 			</Routes>
 		</Router>
 	);
