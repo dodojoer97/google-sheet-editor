@@ -1,18 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import FirebaseAuthService from "../services/FirebaseAuthService";
-import { User } from "firebase/auth";
+import { User, onAuthStateChanged } from "firebase/auth";
 
 export default function GoogleAuthButton() {
 	const [user, setUser] = useState<User | null>(null);
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		const unsubscribe = onAuthStateChanged(
+			FirebaseAuthService.getAuthInstance(),
+			(authUser) => {
+				setUser(authUser);
+				if (authUser) navigate("/edit");
+			}
+		);
+		return () => unsubscribe();
+	}, [navigate]);
 
 	const handleSignIn = async () => {
-		const user = await FirebaseAuthService.signInWithGoogle();
-		if (user) setUser(user);
+		const signedInUser = await FirebaseAuthService.signInWithGoogle();
+		if (signedInUser) {
+			setUser(signedInUser);
+			navigate("/edit");
+		}
 	};
 
 	const handleSignOut = async () => {
 		await FirebaseAuthService.signOutUser();
 		setUser(null);
+		navigate("/");
 	};
 
 	return (
