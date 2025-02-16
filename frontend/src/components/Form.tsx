@@ -1,9 +1,7 @@
 import { useState } from "react";
 import FirebaseAuthService from "../services/FirebaseAuthService";
-import { Job, jobSchema, ALLOWED_STATUS, ALLOWED_JOB_TITLES } from "@shared"; // ✅ Import from shared
-
-// Config
-import config from "../config/endpoints"
+import { Job, jobSchema, ALLOWED_STATUS, ALLOWED_JOB_TITLES } from "@shared";
+import config from "../config/endpoints";
 
 export default function JobForm() {
   const [job, setJob] = useState<Partial<Job>>({
@@ -12,12 +10,12 @@ export default function JobForm() {
     jobPostDate: "",
     jobFoundDate: "",
     applicationDate: "",
-    status: "",
+    status: ALLOWED_STATUS[0],
     connectionName: "",
     connectionLinkedIn: "",
     hiringManager: "",
     hiringManagerLinkedIn: "",
-    jobTitle: "",
+    jobTitle: ALLOWED_JOB_TITLES[0],
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -28,12 +26,10 @@ export default function JobForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrors({}); // Reset errors
+    setErrors({});
 
-    // Validate before submitting
     const validationResult = jobSchema.safeParse(job);
     if (!validationResult.success) {
-      // Format errors
       const errorMessages: Record<string, string> = {};
       validationResult.error.errors.forEach((error) => {
         if (error.path.length) {
@@ -51,10 +47,8 @@ export default function JobForm() {
         return;
       }
 
-      // Get Firebase Auth Token
       const token = await user.getIdToken();
-
-      const response = await fetch(config.API_BASE_URL, {
+      const response = await fetch(`${config.API_BASE_URL}/add-job`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -95,131 +89,155 @@ export default function JobForm() {
         {errors.auth && <p className="text-red-500">{errors.auth}</p>}
         {errors.server && <p className="text-red-500">{errors.server}</p>}
 
-        <input
-          type="text"
-          name="company"
-          placeholder="Company Name"
-          className="border p-2 rounded"
-          value={job.company}
-          onChange={handleChange}
-          required
-        />
+        <label className="font-medium">
+          Company Name
+          <input
+            type="text"
+            name="company"
+            className="border p-2 rounded w-full"
+            value={job.company}
+            onChange={handleChange}
+            required
+          />
+        </label>
         {errors.company && <p className="text-red-500 text-sm">{errors.company}</p>}
 
-        <input
-          type="url"
-          name="jobLink"
-          placeholder="Job Link"
-          className="border p-2 rounded"
-          value={job.jobLink}
-          onChange={handleChange}
-          required
-        />
+        <label className="font-medium">
+          Job Link
+          <input
+            type="url"
+            name="jobLink"
+            className="border p-2 rounded w-full"
+            value={job.jobLink}
+            onChange={handleChange}
+            required
+          />
+        </label>
         {errors.jobLink && <p className="text-red-500 text-sm">{errors.jobLink}</p>}
 
-        <input
-          type="date"
-          name="jobPostDate"
-          placeholder="Job Post Date"
-          className="border p-2 rounded"
-          value={job.jobPostDate}
-          onChange={handleChange}
-          required
-        />
+        <label className="font-medium">
+          Job Post Date
+          <input
+            type="date"
+            name="jobPostDate"
+            className="border p-2 rounded w-full"
+            value={job.jobPostDate}
+            onChange={handleChange}
+            required
+          />
+        </label>
         {errors.jobPostDate && <p className="text-red-500 text-sm">{errors.jobPostDate}</p>}
 
-        <input
-          type="date"
-          name="jobFoundDate"
-          placeholder="Job Found Date"
-          className="border p-2 rounded"
-          value={job.jobFoundDate}
-          onChange={handleChange}
-          required
-        />
+        <label className="font-medium">
+          Job Found Date
+          <input
+            type="date"
+            name="jobFoundDate"
+            className="border p-2 rounded w-full"
+            value={job.jobFoundDate}
+            onChange={handleChange}
+            required
+          />
+        </label>
         {errors.jobFoundDate && <p className="text-red-500 text-sm">{errors.jobFoundDate}</p>}
 
-        <input
-          type="date"
-          name="applicationDate"
-          placeholder="Application Date"
-          className="border p-2 rounded"
-          value={job.applicationDate}
-          onChange={handleChange}
-          required
-        />
+        <label className="font-medium">
+          Application Date
+          <input
+            type="date"
+            name="applicationDate"
+            className="border p-2 rounded w-full"
+            value={job.applicationDate}
+            onChange={handleChange}
+            required
+          />
+        </label>
         {errors.applicationDate && <p className="text-red-500 text-sm">{errors.applicationDate}</p>}
 
-        <select
-          name="status"
-          className="border p-2 rounded"
-          value={job.status}
-          onChange={handleChange}
-          required
-        >
-          {ALLOWED_STATUS.map((status) => (
-            <option key={status} value={status}>
-              {status}
-            </option>
-          ))}
-        </select>
+        <label className="font-medium">
+          Status
+          <select
+            name="status"
+            className="border p-2 rounded w-full"
+            value={job.status}
+            onChange={handleChange}
+            required
+          >
+            {ALLOWED_STATUS.map((status) => (
+              <option key={status} value={status}>
+                {status}
+              </option>
+            ))}
+          </select>
+        </label>
         {errors.status && <p className="text-red-500 text-sm">{errors.status}</p>}
 
-        <input
-          type="text"
-          name="connectionName"
-          placeholder="Connection Name"
-          className="border p-2 rounded"
-          value={job.connectionName}
-          onChange={handleChange}
-          required
-        />
+        <label className="font-medium">
+          Connection Name
+          <input
+            type="text"
+            name="connectionName"
+            className="border p-2 rounded w-full"
+            value={job.connectionName}
+            onChange={handleChange}
+            required
+          />
+        </label>
         {errors.connectionName && <p className="text-red-500 text-sm">{errors.connectionName}</p>}
 
-        <input
-          type="url"
-          name="connectionLinkedIn"
-          placeholder="Connection LinkedIn (Optional)"
-          className="border p-2 rounded"
-          value={job.connectionLinkedIn}
-          onChange={handleChange}
-        />
+        <label className="font-medium">
+          Connection LinkedIn (Optional)
+          <input
+            type="url"
+            name="connectionLinkedIn"
+            className="border p-2 rounded w-full"
+            value={job.connectionLinkedIn}
+            onChange={handleChange}
+          />
+        </label>
         {errors.connectionLinkedIn && <p className="text-red-500 text-sm">{errors.connectionLinkedIn}</p>}
 
-        <input
-          type="text"
-          name="hiringManager"
-          placeholder="Hiring Manager Name"
-          className="border p-2 rounded"
-          value={job.hiringManager}
-          onChange={handleChange}
-          required
-        />
+        <label className="font-medium">
+          Hiring Manager Name
+          <input
+            type="text"
+            name="hiringManager"
+            className="border p-2 rounded w-full"
+            value={job.hiringManager}
+            onChange={handleChange}
+            required
+          />
+        </label>
         {errors.hiringManager && <p className="text-red-500 text-sm">{errors.hiringManager}</p>}
 
-        <input
-          type="url"
-          name="hiringManagerLinkedIn"
-          placeholder="Hiring Manager LinkedIn (Optional)"
-          className="border p-2 rounded"
-          value={job.hiringManagerLinkedIn}
-          onChange={handleChange}
-        />
+        <label className="font-medium">
+          Hiring Manager LinkedIn (Optional)
+          <input
+            type="url"
+            name="hiringManagerLinkedIn"
+            className="border p-2 rounded w-full"
+            value={job.hiringManagerLinkedIn}
+            onChange={handleChange}
+          />
+        </label>
         {errors.hiringManagerLinkedIn && <p className="text-red-500 text-sm">{errors.hiringManagerLinkedIn}</p>}
 
-        <select
-          name="jobTitle"
-          className="border p-2 rounded"
-          value={job.jobTitle}
-          onChange={handleChange}
-          required
-        >
-          {ALLOWED_JOB_TITLES.map((title) => (
-            <option key={title} value={title}>
-              {title}
-            </option>
-          ))}
-        </select>
+        <label className="font-medium">
+          Job Title
+          <select
+            name="jobTitle"
+            className="border p-2 rounded w-full"
+            value={job.jobTitle}
+            onChange={handleChange}
+            required
+          >
+            {ALLOWED_JOB_TITLES.map((title) => (
+              <option key={title} value={title}>
+                {title}
+              </option>
+            ))}
+          </select>
+        </label>
         {errors.jobTitle && <p className="text-red-500 text-sm">{errors.jobTitle}</p>}
 
         <button type="submit" className="bg-blue-500 text-white p-2 rounded">
