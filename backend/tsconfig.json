@@ -14,6 +14,6 @@
 			"@shared/*": ["../shared/src/*"]  // 👈 Add this to recognize `shared/`
 		}
 	},
-	"include": ["src", "functions", "../common/src/models/User.ts"],
+	"include": ["src", "functions"],
 	"exclude": ["node_modules"]
 }

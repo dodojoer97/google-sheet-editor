@@ -7,7 +7,7 @@
 	"scripts": {
 		"build": "tsc",
 		"start": "nodemon dist/server.js",
-		"dev": "ts-node src/server.ts",
+		"dev": "tsc && ts-node -r tsconfig-paths/register src/server.ts",
 		"lint": "eslint . --ext .ts",
 		"format": "prettier --write ."
 	},
@@ -18,7 +18,7 @@
 		"firebase-admin": "^13.1.0",
 		"googleapis": "^144.0.0",
 		"zod": "^3.24.2",
-		"@google-sheet-editor/shared": "workspace:*"  
+		"@google-sheet-editor/shared": "*"
 	},
 	"devDependencies": {
 		"@types/cors": "^2.8.17",
