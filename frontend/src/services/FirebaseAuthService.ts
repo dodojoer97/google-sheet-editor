@@ -10,8 +10,6 @@ const firebaseConfig = {
 	appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-console.log("firebaseConfig: ", firebaseConfig);
-
 class FirebaseAuthService {
 	private static instance: FirebaseAuthService;
 	private auth;
