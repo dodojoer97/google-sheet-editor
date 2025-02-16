@@ -3,13 +3,13 @@ import FirebaseAuthService from "../services/FirebaseAuthService";
 import { Job, jobSchema, ALLOWED_STATUS } from "@shared"; // ✅ Import from shared
 
 export default function JobForm() {
-	const [job, setJob] = useState<Job>({
+	const [job, setJob] = useState<Partial<Job>>({
 		company: "",
 		jobLink: "",
 		jobPostDate: "",
 		jobFoundDate: "",
 		applicationDate: "",
-		status: "Applied",
+		status: "",
 		connectionName: "",
 		connectionLinkedIn: "",
 		hiringManager: "",
