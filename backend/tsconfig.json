@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"target": "ES6",
 		"module": "CommonJS",
-		"outDir": "./dist", // Corrected from "./srtc" to "./dist"
+		"outDir": "./dist",
 		"strict": true,
 		"esModuleInterop": true,
 		"resolveJsonModule": true,
@@ -11,7 +11,7 @@
 		"types": ["node"],
 		"paths": {
 			"@/*": ["src/*"],
-			"@common": ["../common/"]
+			"@shared/*": ["../shared/src/*"]  // 👈 Add this to recognize `shared/`
 		}
 	},
 	"include": ["src", "functions", "../common/src/models/User.ts"],

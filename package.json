@@ -1,0 +1,9 @@
+{
+  "name": "google-sheet-editor",
+  "private": true,
+  "workspaces": [
+    "shared",
+    "backend",
+    "frontend"
+  ]
+}

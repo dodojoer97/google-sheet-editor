@@ -1,16 +1,11 @@
 import { google } from "googleapis";
-import * as dotenv from "dotenv";
-import { jobSchema } from "../validations/validation"; // Import Zod validation schema
-import { Job } from "../models/Job"; // Import Job model
-
-dotenv.config();
-
-console.log("process.env.GOOGLE_SHEET_ID: ", process.env.GOOGLE_SHEET_ID);
+import { Job } from "@shared/models/Job";
+import { jobSchema } from "@shared/validations/jobValidation";
 
 class GoogleSheetsService {
 	private static instance: GoogleSheetsService;
 	private sheets;
-	private spreadsheetId: string = process.env.GOOGLE_SHEET_ID!;
+	private spreadsheetId = process.env.GOOGLE_SHEET_ID!;
 
 	private constructor() {
 		const auth = new google.auth.GoogleAuth({
@@ -28,31 +23,19 @@ class GoogleSheetsService {
 		return GoogleSheetsService.instance;
 	}
 
-	/**
-	 * Validates job data and appends a row to Google Sheets.
-	 * @param jobData - The job data object to validate and insert.
-	 * @throws Error if validation fails or Google Sheets API fails.
-	 */
 	public async appendRow(jobData: Job): Promise<void> {
-		try {
-			// Validate job data using Zod
-			const validationResult = jobSchema.safeParse(jobData);
-			if (!validationResult.success) {
-				console.error("Validation failed:", validationResult.error.format());
-				throw new Error(`Validation failed: ${JSON.stringify(validationResult.error.format())}`);
-			}
-
-			console.log("Appending data to Google Sheets:", jobData);
-			await this.sheets.spreadsheets.values.append({
-				spreadsheetId: this.spreadsheetId,
-				range: "Sheet1!A:L", // Ensure the correct range based on Google Sheets columns
-				valueInputOption: "RAW",
-				requestBody: { values: [jobData.toArray()] }, // Convert Job object to an array
-			});
-		} catch (error) {
-			console.error("Error appending row to Google Sheet:", error);
-			throw error;
+		// Validate data before inserting into Google Sheets
+		const validationResult = jobSchema.safeParse(jobData);
+		if (!validationResult.success) {
+			throw new Error("Validation failed: " + JSON.stringify(validationResult.error.format()));
 		}
+
+		await this.sheets.spreadsheets.values.append({
+			spreadsheetId: this.spreadsheetId,
+			range: "Sheet1!A:L",
+			valueInputOption: "RAW",
+			requestBody: { values: [jobData.toArray()] },
+		});
 	}
 }
 
