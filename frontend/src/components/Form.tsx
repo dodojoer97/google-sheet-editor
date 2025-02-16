@@ -3,6 +3,24 @@ import FirebaseAuthService from "../services/FirebaseAuthService";
 import { Job, jobSchema, ALLOWED_STATUS, ALLOWED_JOB_TITLES } from "@shared";
 import config from "../config/endpoints";
 
+/**
+ * Convert YYYY-MM-DD (date input format) to DD/MM/YYYY.
+ */
+const convertToDDMMYYYY = (date: string) => {
+  if (!date) return "";
+  const [year, month, day] = date.split("-");
+  return `${day}/${month}/${year}`;
+};
+
+/**
+ * Convert DD/MM/YYYY back to YYYY-MM-DD (for input value).
+ */
+const convertToYYYYMMDD = (date: string) => {
+  if (!date) return "";
+  const [day, month, year] = date.split("/");
+  return `${year}-${month}-${day}`;
+};
+
 export default function JobForm() {
   const [job, setJob] = useState<Partial<Job>>({
     company: "",
@@ -21,11 +39,17 @@ export default function JobForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setJob({ ...job, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    setJob((prev) => ({
+      ...prev,
+      [name]: name.includes("Date") ? convertToDDMMYYYY(value) : value, // Convert only date fields
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Submitting...");
     setErrors({});
 
     const validationResult = jobSchema.safeParse(job);
@@ -54,7 +78,7 @@ export default function JobForm() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(job),
+        body: JSON.stringify(job), // Send in DD/MM/YYYY format
       });
 
       if (response.ok) {
@@ -121,7 +145,7 @@ export default function JobForm() {
             type="date"
             name="jobPostDate"
             className="border p-2 rounded w-full"
-            value={job.jobPostDate}
+            value={convertToYYYYMMDD(job.jobPostDate || "")} // Display as YYYY-MM-DD for input
             onChange={handleChange}
             required
           />
@@ -134,7 +158,7 @@ export default function JobForm() {
             type="date"
             name="jobFoundDate"
             className="border p-2 rounded w-full"
-            value={job.jobFoundDate}
+            value={convertToYYYYMMDD(job.jobFoundDate || "")}
             onChange={handleChange}
             required
           />
@@ -147,9 +171,8 @@ export default function JobForm() {
             type="date"
             name="applicationDate"
             className="border p-2 rounded w-full"
-            value={job.applicationDate}
+            value={convertToYYYYMMDD(job.applicationDate || "")}
             onChange={handleChange}
-            required
           />
         </label>
         {errors.applicationDate && <p className="text-red-500 text-sm">{errors.applicationDate}</p>}
@@ -173,54 +196,28 @@ export default function JobForm() {
         {errors.status && <p className="text-red-500 text-sm">{errors.status}</p>}
 
         <label className="font-medium">
-          Connection Name
+          Connection Name (Optional)
           <input
             type="text"
             name="connectionName"
             className="border p-2 rounded w-full"
             value={job.connectionName}
             onChange={handleChange}
-            required
           />
         </label>
         {errors.connectionName && <p className="text-red-500 text-sm">{errors.connectionName}</p>}
 
         <label className="font-medium">
-          Connection LinkedIn (Optional)
-          <input
-            type="url"
-            name="connectionLinkedIn"
-            className="border p-2 rounded w-full"
-            value={job.connectionLinkedIn}
-            onChange={handleChange}
-          />
-        </label>
-        {errors.connectionLinkedIn && <p className="text-red-500 text-sm">{errors.connectionLinkedIn}</p>}
-
-        <label className="font-medium">
-          Hiring Manager Name
+          Hiring Manager Name (Optional)
           <input
             type="text"
             name="hiringManager"
             className="border p-2 rounded w-full"
             value={job.hiringManager}
             onChange={handleChange}
-            required
           />
         </label>
         {errors.hiringManager && <p className="text-red-500 text-sm">{errors.hiringManager}</p>}
-
-        <label className="font-medium">
-          Hiring Manager LinkedIn (Optional)
-          <input
-            type="url"
-            name="hiringManagerLinkedIn"
-            className="border p-2 rounded w-full"
-            value={job.hiringManagerLinkedIn}
-            onChange={handleChange}
-          />
-        </label>
-        {errors.hiringManagerLinkedIn && <p className="text-red-500 text-sm">{errors.hiringManagerLinkedIn}</p>}
 
         <label className="font-medium">
           Job Title
