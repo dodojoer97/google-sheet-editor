@@ -1,7 +1,9 @@
 import { useState } from "react";
 import FirebaseAuthService from "../services/FirebaseAuthService";
 import { Job, jobSchema, ALLOWED_STATUS, ALLOWED_JOB_TITLES } from "@shared"; // ✅ Import from shared
-import { z } from "zod";
+
+// Config
+import config from "../config/endpoints"
 
 export default function JobForm() {
   const [job, setJob] = useState<Partial<Job>>({
@@ -27,7 +29,7 @@ export default function JobForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({}); // Reset errors
-	console.log("job: ", job)
+
     // Validate before submitting
     const validationResult = jobSchema.safeParse(job);
     if (!validationResult.success) {
@@ -52,7 +54,7 @@ export default function JobForm() {
       // Get Firebase Auth Token
       const token = await user.getIdToken();
 
-      const response = await fetch("http://localhost:5000/sheets/add-job", {
+      const response = await fetch(config.API_BASE_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
