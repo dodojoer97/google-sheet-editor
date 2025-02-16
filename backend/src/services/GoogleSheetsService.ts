@@ -2,6 +2,9 @@ import { google } from "googleapis";
 import { Job } from "@shared/models/Job";
 import { jobSchema } from "@shared/validations/jobValidation";
 
+import * as dotenv from "dotenv";
+dotenv.config();
+
 class GoogleSheetsService {
 	private static instance: GoogleSheetsService;
 	private sheets;
