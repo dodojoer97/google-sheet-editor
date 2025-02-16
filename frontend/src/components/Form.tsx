@@ -83,19 +83,6 @@ export default function JobForm() {
 
       if (response.ok) {
         alert("Job added successfully!");
-        setJob({
-          company: "",
-          jobLink: "",
-          jobPostDate: "",
-          jobFoundDate: "",
-          applicationDate: "",
-          status: "Applied",
-          connectionName: "",
-          connectionLinkedIn: "",
-          hiringManager: "",
-          hiringManagerLinkedIn: "",
-          jobTitle: "",
-        });
         setErrors({});
       } else {
         setErrors({ server: "Error submitting the job. Please try again later." });
@@ -145,12 +132,11 @@ export default function JobForm() {
             type="date"
             name="jobPostDate"
             className="border p-2 rounded w-full"
-            value={convertToYYYYMMDD(job.jobPostDate || "")} // Display as YYYY-MM-DD for input
+            value={convertToYYYYMMDD(job.jobPostDate || "")}
             onChange={handleChange}
             required
           />
         </label>
-        {errors.jobPostDate && <p className="text-red-500 text-sm">{errors.jobPostDate}</p>}
 
         <label className="font-medium">
           Job Found Date
@@ -163,7 +149,6 @@ export default function JobForm() {
             required
           />
         </label>
-        {errors.jobFoundDate && <p className="text-red-500 text-sm">{errors.jobFoundDate}</p>}
 
         <label className="font-medium">
           Application Date
@@ -175,7 +160,6 @@ export default function JobForm() {
             onChange={handleChange}
           />
         </label>
-        {errors.applicationDate && <p className="text-red-500 text-sm">{errors.applicationDate}</p>}
 
         <label className="font-medium">
           Status
@@ -193,7 +177,6 @@ export default function JobForm() {
             ))}
           </select>
         </label>
-        {errors.status && <p className="text-red-500 text-sm">{errors.status}</p>}
 
         <label className="font-medium">
           Connection Name (Optional)
@@ -205,7 +188,17 @@ export default function JobForm() {
             onChange={handleChange}
           />
         </label>
-        {errors.connectionName && <p className="text-red-500 text-sm">{errors.connectionName}</p>}
+
+        <label className="font-medium">
+          Connection LinkedIn (Optional)
+          <input
+            type="url"
+            name="connectionLinkedIn"
+            className="border p-2 rounded w-full"
+            value={job.connectionLinkedIn}
+            onChange={handleChange}
+          />
+        </label>
 
         <label className="font-medium">
           Hiring Manager Name (Optional)
@@ -217,7 +210,17 @@ export default function JobForm() {
             onChange={handleChange}
           />
         </label>
-        {errors.hiringManager && <p className="text-red-500 text-sm">{errors.hiringManager}</p>}
+
+        <label className="font-medium">
+          Hiring Manager LinkedIn (Optional)
+          <input
+            type="url"
+            name="hiringManagerLinkedIn"
+            className="border p-2 rounded w-full"
+            value={job.hiringManagerLinkedIn}
+            onChange={handleChange}
+          />
+        </label>
 
         <label className="font-medium">
           Job Title
@@ -235,7 +238,6 @@ export default function JobForm() {
             ))}
           </select>
         </label>
-        {errors.jobTitle && <p className="text-red-500 text-sm">{errors.jobTitle}</p>}
 
         <button type="submit" className="bg-blue-500 text-white p-2 rounded">
           Submit Job
