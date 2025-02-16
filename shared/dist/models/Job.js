@@ -1,16 +1,13 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Job = exports.ALLOWED_JOB_TITLES = exports.ALLOWED_STATUS = void 0;
 // Define allowed dropdown values
-exports.ALLOWED_STATUS = [
+export const ALLOWED_STATUS = [
     "Awaiting Dror’s Review",
     "Easy Apply + Connection Outreach on LinkedIn",
     "Referred via Dror",
     "Requested Referral by LinkedIn + Sent CV",
 ];
-exports.ALLOWED_JOB_TITLES = ["Full Stack", "Frontend", "Backend", "React dev (frontend)"];
-var Job = /** @class */ (function () {
-    function Job(data) {
+export const ALLOWED_JOB_TITLES = ["Full Stack", "Frontend", "Backend", "React dev (frontend)"];
+export class Job {
+    constructor(data) {
         this.company = data.company;
         this.jobLink = data.jobLink;
         this.jobPostDate = data.jobPostDate;
@@ -24,22 +21,20 @@ var Job = /** @class */ (function () {
         this.jobTitle = data.jobTitle;
     }
     // Convert to array (used for Google Sheets insertion)
-    Job.prototype.toArray = function () {
+    toArray() {
         return [
-            this.company,
-            "",
-            this.jobLink,
-            this.jobPostDate,
-            this.jobFoundDate,
-            this.applicationDate,
-            this.status,
-            this.connectionName,
-            this.connectionLinkedIn || "",
-            this.hiringManager,
-            this.hiringManagerLinkedIn || "",
+            this.company, // Column: Company Name
+            "", // Column: Dror's comments (skipped)
+            this.jobLink, // Column: Job Link
+            this.jobPostDate, // Column: Job Post Date
+            this.jobFoundDate, // Column: Job Found Date
+            this.applicationDate, // Column: Application Date
+            this.status, // Column: Status (Dropdown)
+            this.connectionName, // Column: Connection Name
+            this.connectionLinkedIn || "", // Column: Connection LinkedIn
+            this.hiringManager, // Column: Hiring Manager Name
+            this.hiringManagerLinkedIn || "", // Column: Hiring Manager LinkedIn
             this.jobTitle, // Column: Job Title (Dropdown)
         ];
-    };
-    return Job;
-}());
-exports.Job = Job;
+    }
+}

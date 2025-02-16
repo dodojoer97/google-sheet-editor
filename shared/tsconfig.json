@@ -2,10 +2,16 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
-    "declaration": true,
+    "declaration": true, // ✅ Generates `.d.ts` files for type definitions
+    "declarationMap": true, // ✅ Helps debugging imports in other projects
+    "declarationDir": "dist/types", // ✅ Ensures `.d.ts` files are stored in a structured way
     "strict": true,
+    "module": "ESNext", // ✅ Ensures compatibility with frontend (Vite)
+    "target": "ES2020",
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["src/*"]
+  "include": ["src/**/*"], // ✅ Ensures ALL files inside `src/` are included
+  "exclude": ["node_modules", "dist"]
 }
