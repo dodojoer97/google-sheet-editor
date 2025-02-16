@@ -15,3 +15,4 @@ export declare class Job {
     constructor(data: Job);
     toArray(): string[];
 }
+//# sourceMappingURL=Job.d.ts.map

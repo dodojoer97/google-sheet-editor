@@ -36,3 +36,4 @@ export declare const jobSchema: z.ZodObject<{
     connectionLinkedIn?: string | undefined;
     hiringManagerLinkedIn?: string | undefined;
 }>;
+//# sourceMappingURL=jobValidation.d.ts.map
