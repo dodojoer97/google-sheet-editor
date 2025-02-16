@@ -8,8 +8,8 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
-    /* Bundler mode */
-    "moduleResolution": "bundler",
+    /* Module Resolution Fix */
+    "moduleResolution": "node", // ✅ Changed from "bundler" to "node"
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
@@ -21,11 +21,13 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+
     /* Add Support for Shared Module */
     "baseUrl": ".",
     "paths": {
-      "@shared/*": ["../shared/src/*"]  // 👈 Add this for shared imports
+      "@shared/*": ["../shared/src/*"] // ✅ Ensures TypeScript recognizes shared imports
     }
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"] // ✅ Ensures compiled files are not included
 }

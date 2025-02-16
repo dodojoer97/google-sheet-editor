@@ -1,12 +1,20 @@
 import { useState } from "react";
 import FirebaseAuthService from "../services/FirebaseAuthService";
+import { Job, jobSchema, ALLOWED_STATUS } from "@shared"; // ✅ Import from shared
 
 export default function JobForm() {
-	const [job, setJob] = useState({
-		title: "",
+	const [job, setJob] = useState<Job>({
 		company: "",
 		jobLink: "",
+		jobPostDate: "",
+		jobFoundDate: "",
+		applicationDate: "",
 		status: "Applied",
+		connectionName: "",
+		connectionLinkedIn: "",
+		hiringManager: "",
+		hiringManagerLinkedIn: "",
+		jobTitle: "",
 	});
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -15,10 +23,18 @@ export default function JobForm() {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+
 		try {
 			const user = FirebaseAuthService.getAuthInstance().currentUser;
 			if (!user) {
 				alert("You must be signed in to submit a job.");
+				return;
+			}
+
+			// Validate before sending to backend
+			const validationResult = jobSchema.safeParse(job);
+			if (!validationResult.success) {
+				alert("Validation failed: " + JSON.stringify(validationResult.error.format()));
 				return;
 			}
 
@@ -36,7 +52,19 @@ export default function JobForm() {
 
 			if (response.ok) {
 				alert("Job added successfully!");
-				setJob({ title: "", company: "", jobLink: "", status: "Applied" });
+				setJob({
+					company: "",
+					jobLink: "",
+					jobPostDate: "",
+					jobFoundDate: "",
+					applicationDate: "",
+					status: "Applied",
+					connectionName: "",
+					connectionLinkedIn: "",
+					hiringManager: "",
+					hiringManagerLinkedIn: "",
+					jobTitle: "",
+				});
 			} else {
 				alert("Error submitting the job");
 			}
@@ -50,15 +78,6 @@ export default function JobForm() {
 		<div className="max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg mt-10">
 			<h2 className="text-2xl font-semibold text-center mb-4">Job Tracker</h2>
 			<form onSubmit={handleSubmit} className="flex flex-col gap-4">
-				<input
-					type="text"
-					name="title"
-					placeholder="Job Title"
-					className="border p-2 rounded"
-					value={job.title}
-					onChange={handleChange}
-					required
-				/>
 				<input
 					type="text"
 					name="company"
@@ -77,16 +96,45 @@ export default function JobForm() {
 					onChange={handleChange}
 					required
 				/>
+				<input
+					type="date"
+					name="jobPostDate"
+					placeholder="Job Post Date"
+					className="border p-2 rounded"
+					value={job.jobPostDate}
+					onChange={handleChange}
+					required
+				/>
+				<input
+					type="date"
+					name="jobFoundDate"
+					placeholder="Job Found Date"
+					className="border p-2 rounded"
+					value={job.jobFoundDate}
+					onChange={handleChange}
+					required
+				/>
+				<input
+					type="date"
+					name="applicationDate"
+					placeholder="Application Date"
+					className="border p-2 rounded"
+					value={job.applicationDate}
+					onChange={handleChange}
+					required
+				/>
 				<select
 					name="status"
 					className="border p-2 rounded"
 					value={job.status}
 					onChange={handleChange}
+					required
 				>
-					<option value="Applied">Applied</option>
-					<option value="Interview Scheduled">Interview Scheduled</option>
-					<option value="Offer Received">Offer Received</option>
-					<option value="Rejected">Rejected</option>
+					{ALLOWED_STATUS.map((status) => (
+						<option key={status} value={status}>
+							{status}
+						</option>
+					))}
 				</select>
 				<button type="submit" className="bg-blue-500 text-white p-2 rounded">
 					Submit Job
