@@ -3,24 +3,6 @@ import FirebaseAuthService from "../services/FirebaseAuthService";
 import { Job, jobSchema, ALLOWED_STATUS, ALLOWED_JOB_TITLES } from "@shared";
 import config from "../config/endpoints";
 
-/**
- * Convert YYYY-MM-DD (date input format) to DD/MM/YYYY.
- */
-const convertToDDMMYYYY = (date: string) => {
-  if (!date) return "";
-  const [year, month, day] = date.split("-");
-  return `${day}/${month}/${year}`;
-};
-
-/**
- * Convert DD/MM/YYYY back to YYYY-MM-DD (for input value).
- */
-const convertToYYYYMMDD = (date: string) => {
-  if (!date) return "";
-  const [day, month, year] = date.split("/");
-  return `${year}-${month}-${day}`;
-};
-
 export default function JobForm() {
   const [job, setJob] = useState<Partial<Job>>({
     company: "",
@@ -39,17 +21,11 @@ export default function JobForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-
-    setJob((prev) => ({
-      ...prev,
-      [name]: name.includes("Date") ? convertToDDMMYYYY(value) : value, // Convert only date fields
-    }));
+    setJob({ ...job, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submitting...");
     setErrors({});
 
     const validationResult = jobSchema.safeParse(job);
@@ -78,7 +54,7 @@ export default function JobForm() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(job), // Send in DD/MM/YYYY format
+        body: JSON.stringify(job),
       });
 
       if (response.ok) {
@@ -132,11 +108,12 @@ export default function JobForm() {
             type="date"
             name="jobPostDate"
             className="border p-2 rounded w-full"
-            value={convertToYYYYMMDD(job.jobPostDate || "")}
+            value={job.jobPostDate}
             onChange={handleChange}
             required
           />
         </label>
+        {errors.jobPostDate && <p className="text-red-500 text-sm">{errors.jobPostDate}</p>}
 
         <label className="font-medium">
           Job Found Date
@@ -144,11 +121,12 @@ export default function JobForm() {
             type="date"
             name="jobFoundDate"
             className="border p-2 rounded w-full"
-            value={convertToYYYYMMDD(job.jobFoundDate || "")}
+            value={job.jobFoundDate}
             onChange={handleChange}
             required
           />
         </label>
+        {errors.jobFoundDate && <p className="text-red-500 text-sm">{errors.jobFoundDate}</p>}
 
         <label className="font-medium">
           Application Date
@@ -156,10 +134,12 @@ export default function JobForm() {
             type="date"
             name="applicationDate"
             className="border p-2 rounded w-full"
-            value={convertToYYYYMMDD(job.applicationDate || "")}
+            value={job.applicationDate}
             onChange={handleChange}
+            required
           />
         </label>
+        {errors.applicationDate && <p className="text-red-500 text-sm">{errors.applicationDate}</p>}
 
         <label className="font-medium">
           Status
@@ -177,6 +157,7 @@ export default function JobForm() {
             ))}
           </select>
         </label>
+        {errors.status && <p className="text-red-500 text-sm">{errors.status}</p>}
 
         <label className="font-medium">
           Connection Name (Optional)
@@ -188,6 +169,7 @@ export default function JobForm() {
             onChange={handleChange}
           />
         </label>
+        {errors.connectionName && <p className="text-red-500 text-sm">{errors.connectionName}</p>}
 
         <label className="font-medium">
           Connection LinkedIn (Optional)
@@ -199,6 +181,7 @@ export default function JobForm() {
             onChange={handleChange}
           />
         </label>
+        {errors.connectionLinkedIn && <p className="text-red-500 text-sm">{errors.connectionLinkedIn}</p>}
 
         <label className="font-medium">
           Hiring Manager Name (Optional)
@@ -208,8 +191,10 @@ export default function JobForm() {
             className="border p-2 rounded w-full"
             value={job.hiringManager}
             onChange={handleChange}
+            
           />
         </label>
+        {errors.hiringManager && <p className="text-red-500 text-sm">{errors.hiringManager}</p>}
 
         <label className="font-medium">
           Hiring Manager LinkedIn (Optional)
@@ -221,6 +206,7 @@ export default function JobForm() {
             onChange={handleChange}
           />
         </label>
+        {errors.hiringManagerLinkedIn && <p className="text-red-500 text-sm">{errors.hiringManagerLinkedIn}</p>}
 
         <label className="font-medium">
           Job Title
@@ -238,6 +224,7 @@ export default function JobForm() {
             ))}
           </select>
         </label>
+        {errors.jobTitle && <p className="text-red-500 text-sm">{errors.jobTitle}</p>}
 
         <button type="submit" className="bg-blue-500 text-white p-2 rounded">
           Submit Job

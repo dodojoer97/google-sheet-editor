@@ -41,16 +41,16 @@ export class Job {
   toArray(): string[] {
     return [
       this.company,                // Column: Company Name
-      "",                          // Column: Dror's comments (skipped)
+      "N.A",                          // Column: Dror's comments (skipped)
       this.jobLink,                // Column: Job Link
       this.jobPostDate,            // Column: Job Post Date
       this.jobFoundDate,           // Column: Job Found Date
       this.applicationDate,        // Column: Application Date
       this.status,                 // Column: Status (Dropdown)
       this.connectionName,         // Column: Connection Name
-      this.connectionLinkedIn || "",  // Column: Connection LinkedIn
+      this.connectionLinkedIn || "N.A",  // Column: Connection LinkedIn
       this.hiringManager,          // Column: Hiring Manager Name
-      this.hiringManagerLinkedIn || "", // Column: Hiring Manager LinkedIn
+      this.hiringManagerLinkedIn || "N.A", // Column: Hiring Manager LinkedIn
       this.jobTitle,               // Column: Job Title (Dropdown)
     ];
   }

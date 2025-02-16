@@ -2,8 +2,8 @@ import { google } from "googleapis";
 import { Job } from "@shared/models/Job";
 import { jobSchema } from "@shared/validations/jobValidation";
 
-import * as dotenv from "dotenv";
-dotenv.config();
+import * as dotenv from "dotenv"
+dotenv.config()
 
 class GoogleSheetsService {
 	private static instance: GoogleSheetsService;
@@ -32,12 +32,14 @@ class GoogleSheetsService {
 		if (!validationResult.success) {
 			throw new Error("Validation failed: " + JSON.stringify(validationResult.error.format()));
 		}
+		const requestBody = { values: [jobData.toArray()] }
 
+		
 		await this.sheets.spreadsheets.values.append({
 			spreadsheetId: this.spreadsheetId,
 			range: "Sheet1!A:L",
 			valueInputOption: "RAW",
-			requestBody: { values: [jobData.toArray()] },
+			requestBody
 		});
 	}
 }

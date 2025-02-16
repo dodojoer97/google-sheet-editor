@@ -11,7 +11,7 @@
     }
   },
   "scripts": {
-    "build": "rm -rf dist && tsc"  
+    "build": "rm -rf dist && tsc -w"  
   },
   "dependencies": {
     "zod": "^3.21.4"
