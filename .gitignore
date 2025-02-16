@@ -1,0 +1,23 @@
+# Ignore Node.js dependencies
+node_modules/
+**/node_modules/
+
+# Ignore build outputs
+dist/
+build/
+.out/
+.tmp/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore environment variables
+.env
+.env.local
+.env.*.local
+
+# Ignore package manager locks
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
