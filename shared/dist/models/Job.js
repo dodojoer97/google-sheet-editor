@@ -23,17 +23,17 @@ export class Job {
     // Convert to array (used for Google Sheets insertion)
     toArray() {
         return [
-            this.company, // Column: Company Name
-            "N.A", // Column: Dror's comments (skipped)
-            this.jobLink, // Column: Job Link
-            this.jobPostDate, // Column: Job Post Date
-            this.jobFoundDate, // Column: Job Found Date
-            this.applicationDate, // Column: Application Date
-            this.status, // Column: Status (Dropdown)
-            this.connectionName, // Column: Connection Name
-            this.connectionLinkedIn || "N.A", // Column: Connection LinkedIn
-            this.hiringManager, // Column: Hiring Manager Name
-            this.hiringManagerLinkedIn || "N.A", // Column: Hiring Manager LinkedIn
+            this.company,
+            "N.A",
+            this.jobLink,
+            this.jobPostDate,
+            this.jobFoundDate,
+            this.applicationDate,
+            this.status,
+            this.connectionName,
+            this.connectionLinkedIn || "N.A",
+            this.hiringManager,
+            this.hiringManagerLinkedIn || "N.A",
             this.jobTitle, // Column: Job Title (Dropdown)
         ];
     }
