@@ -24,20 +24,31 @@ export const jobSchema = z.object({
 		.string()
 		.regex(dateRegex, "Application Date must be in DD/MM/YYYY format")
 		.optional(),
+
 	status: z.enum(ALLOWED_STATUS),
-	connectionName: z.string().min(1, "Connection name is required").optional(),
+
+	// Make optional fields truly optional (allow empty strings)
+	connectionName: z
+		.string()
+		.optional()
+		.transform((val) => val?.trim() || undefined),
 	connectionLinkedIn: z
 		.string()
 		.optional()
 		.refine((val) => !val || isValidURL(val), {
 			message: "Invalid connection LinkedIn URL",
 		}),
-	hiringManager: z.string().min(1, "Hiring Manager name is required").optional(),
+
+	hiringManager: z
+		.string()
+		.optional()
+		.transform((val) => val?.trim() || undefined),
 	hiringManagerLinkedIn: z
 		.string()
 		.optional()
 		.refine((val) => !val || isValidURL(val), {
 			message: "Invalid Hiring Manager LinkedIn URL",
 		}),
+
 	jobTitle: z.enum(ALLOWED_JOB_TITLES),
 });
