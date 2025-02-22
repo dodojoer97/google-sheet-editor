@@ -1,69 +1,43 @@
-import { google } from "googleapis";
-import { Job } from "@shared/models/Job";
-import { jobSchema } from "@shared/validations/jobValidation";
+import * as admin from "firebase-admin";
 import * as dotenv from "dotenv";
 
 // Load environment variables from .env
 dotenv.config();
 
-class GoogleSheetsService {
-	private static instance: GoogleSheetsService;
-	private sheets;
-	private spreadsheetId: string;
+class FirebaseAuthService {
+	private static instance: FirebaseAuthService;
 
 	private constructor() {
-		// Load credentials from environment variables
+		// ✅ Use dotenv to load service account credentials from process.env
 		const serviceAccountString = process.env.GOOGLE_SERVICE_ACCOUNT;
 		if (!serviceAccountString) {
 			throw new Error(
-				"Service account not found in environment variables. " +
-					"Please set GOOGLE_SERVICE_ACCOUNT in your .env file."
+				"Service account not found. Make sure GOOGLE_SERVICE_ACCOUNT is set in .env"
 			);
 		}
 
 		const serviceAccount = JSON.parse(serviceAccountString);
 
-		this.spreadsheetId = process.env.SPREADSHEET_ID || "";
-		if (!this.spreadsheetId) {
-			throw new Error(
-				"Spreadsheet ID not found in environment variables. " +
-					"Please set SPREADSHEET_ID in your .env file."
-			);
-		}
-
-		const auth = new google.auth.GoogleAuth({
-			credentials: serviceAccount,
-			scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+		admin.initializeApp({
+			credential: admin.credential.cert(serviceAccount),
 		});
-
-		this.sheets = google.sheets({ version: "v4", auth });
 	}
 
-	public static getInstance(): GoogleSheetsService {
-		if (!GoogleSheetsService.instance) {
-			GoogleSheetsService.instance = new GoogleSheetsService();
+	public static getInstance(): FirebaseAuthService {
+		if (!FirebaseAuthService.instance) {
+			FirebaseAuthService.instance = new FirebaseAuthService();
 		}
-		return GoogleSheetsService.instance;
+		return FirebaseAuthService.instance;
 	}
 
-	public async appendRow(jobData: Job): Promise<void> {
-		// Validate data before inserting into Google Sheets
-		const validationResult = jobSchema.safeParse(jobData);
-		if (!validationResult.success) {
-			throw new Error(
-				"Validation failed: " + JSON.stringify(validationResult.error.format())
-			);
+	public async verifyToken(token: string): Promise<admin.auth.DecodedIdToken | null> {
+		try {
+			return await admin.auth().verifyIdToken(token);
+		} catch (error) {
+			console.error("Invalid Firebase token:", error);
+			return null;
 		}
-
-		const requestBody = { values: [jobData.toArray()] };
-
-		await this.sheets.spreadsheets.values.append({
-			spreadsheetId: this.spreadsheetId,
-			range: "Sheet1!A:L",
-			valueInputOption: "RAW",
-			requestBody,
-		});
 	}
 }
 
-export default GoogleSheetsService.getInstance();
+export default FirebaseAuthService.getInstance();
