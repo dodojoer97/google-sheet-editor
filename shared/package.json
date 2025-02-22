@@ -1,23 +1,23 @@
 {
-  "name": "@google-sheet-editor/shared",
-  "version": "1.0.0",
-  "private": true,
-  "main": "dist/index.js", 
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
-  "scripts": {
-    "build": "rm -rf dist && tsc -w"  
-  },
-  "dependencies": {
-    "zod": "^3.21.4"
-  },
-  "devDependencies": {
-    "typescript": "^5.1.6",
-    "@types/node": "^18.14.1"
-  }
+	"name": "@google-sheet-editor/shared",
+	"version": "1.0.0",
+	"private": true,
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		}
+	},
+	"scripts": {
+		"build": "rm -rf dist && tsc"
+	},
+	"dependencies": {
+		"zod": "^3.21.4"
+	},
+	"devDependencies": {
+		"typescript": "^5.1.6",
+		"@types/node": "^18.14.1"
+	}
 }
