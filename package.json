@@ -9,7 +9,7 @@
 	"scripts": {
 		"build": "npm run build shared && npm run build",
 		"dev": "npm run build:shared && npm run dev:backend",
-		"start": "npm run build && npm run start:backend",
+		"start": "npm run start:backend",
 		"build:shared": "npm run build shared",
 		"build:backend": "npm run build backend",
 		"dev:backend": "npm run build:shared && npm run dev backend",
