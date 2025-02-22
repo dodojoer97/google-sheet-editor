@@ -1,15 +1,22 @@
 import * as admin from "firebase-admin";
 import * as dotenv from "dotenv";
-import * as functions from "firebase-functions";
 
+// Load environment variables from .env
 dotenv.config();
 
 class FirebaseAuthService {
 	private static instance: FirebaseAuthService;
 
 	private constructor() {
-		// ✅ Use Firebase Functions config to store service account credentials
-		const serviceAccount = JSON.parse(functions.config().google.service_account);
+		// ✅ Use dotenv to load service account credentials from process.env
+		const serviceAccountString = process.env.GOOGLE_SERVICE_ACCOUNT;
+		if (!serviceAccountString) {
+			throw new Error(
+				"Service account not found. Make sure GOOGLE_SERVICE_ACCOUNT is set in .env"
+			);
+		}
+
+		const serviceAccount = JSON.parse(serviceAccountString);
 
 		admin.initializeApp({
 			credential: admin.credential.cert(serviceAccount),
