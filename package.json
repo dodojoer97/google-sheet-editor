@@ -1,18 +1,18 @@
 {
-  "name": "google-sheet-editor",
-  "private": true,
-  "workspaces": [
-    "shared",
-    "backend",
-    "frontend"
-  ],
-  "scripts": {
-    "build": "npm run build -w shared && npm run build -w backend",
-    "dev": "npm run build:shared && npm run dev:backend",
-    "start": "npm run build && npm run start:backend",
-    "build:shared": "npm run build -w shared",
-    "build:backend": "npm run build -w backend",
-    "dev:backend": "npm run build:shared && npm run dev -w backend",
-    "start:backend": "npm run build && npm run start -w backend"
-  }
+	"name": "google-sheet-editor",
+	"private": true,
+	"workspaces": [
+		"shared",
+		"backend",
+		"frontend"
+	],
+	"scripts": {
+		"build": "npm run build -w shared && npm run build",
+		"dev": "npm run build:shared && npm run dev:backend",
+		"start": "npm run build && npm run start:backend",
+		"build:shared": "npm run build -w shared",
+		"build:backend": "npm run build -w backend",
+		"dev:backend": "npm run build:shared && npm run dev -w backend",
+		"start:backend": "npm run build && npm run start -w backend"
+	}
 }
