@@ -1,5 +1,6 @@
-import admin from "firebase-admin";
+import * as admin from "firebase-admin";
 import * as dotenv from "dotenv";
+import * as functions from "firebase-functions";
 
 dotenv.config();
 
@@ -7,8 +8,11 @@ class FirebaseAuthService {
 	private static instance: FirebaseAuthService;
 
 	private constructor() {
+		// ✅ Use Firebase Functions config to store service account credentials
+		const serviceAccount = JSON.parse(functions.config().google.service_account);
+
 		admin.initializeApp({
-			credential: admin.credential.cert(require("../../service-account.json")),
+			credential: admin.credential.cert(serviceAccount),
 		});
 	}
 
