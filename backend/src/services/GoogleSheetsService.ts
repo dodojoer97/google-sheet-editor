@@ -57,7 +57,7 @@ class GoogleSheetsService {
 
 		await this.sheets.spreadsheets.values.append({
 			spreadsheetId: this.spreadsheetId,
-			range: "Sheet1!A:L",
+			range: "Ido!A:L",
 			valueInputOption: "RAW",
 			requestBody,
 		});
