@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import sheetsRoutes from "./routes/sheetsRoutes.js"; // Ensure the ".js" extension if using ES modules
+import sheetsRoutes from "./routes/sheetsRoutes"; // Ensure the ".js" extension if using ES modules
 
 const app = express();
 app.use(cors());
