@@ -1,10 +1,16 @@
 import { google } from "googleapis";
 import { Job } from "@shared/models/Job";
 import { jobSchema } from "@shared/validations/jobValidation";
+<<<<<<< HEAD:backend/src/services/GoogleSheetsService.ts
 import * as dotenv from "dotenv";
 
 // Load environment variables from .env
 dotenv.config();
+=======
+
+import * as dotenv from "dotenv"
+dotenv.config()
+>>>>>>> parent of 48cb909 (add functions):functions/src/services/GoogleSheetsService.ts
 
 class GoogleSheetsService {
 	private static instance: GoogleSheetsService;
@@ -12,6 +18,7 @@ class GoogleSheetsService {
 	private spreadsheetId: string;
 
 	private constructor() {
+<<<<<<< HEAD:backend/src/services/GoogleSheetsService.ts
 		// Load credentials from environment variables
 		const serviceAccountString = process.env.GOOGLE_SERVICE_ACCOUNT;
 		if (!serviceAccountString) {
@@ -31,8 +38,10 @@ class GoogleSheetsService {
 			);
 		}
 
+=======
+>>>>>>> parent of 48cb909 (add functions):functions/src/services/GoogleSheetsService.ts
 		const auth = new google.auth.GoogleAuth({
-			credentials: serviceAccount,
+			credentials: require("../../service-account.json"),
 			scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 		});
 
@@ -50,18 +59,16 @@ class GoogleSheetsService {
 		// Validate data before inserting into Google Sheets
 		const validationResult = jobSchema.safeParse(jobData);
 		if (!validationResult.success) {
-			throw new Error(
-				"Validation failed: " + JSON.stringify(validationResult.error.format())
-			);
+			throw new Error("Validation failed: " + JSON.stringify(validationResult.error.format()));
 		}
+		const requestBody = { values: [jobData.toArray()] }
 
-		const requestBody = { values: [jobData.toArray()] };
-
+		
 		await this.sheets.spreadsheets.values.append({
 			spreadsheetId: this.spreadsheetId,
 			range: "Sheet1!A:L",
 			valueInputOption: "RAW",
-			requestBody,
+			requestBody
 		});
 	}
 }
