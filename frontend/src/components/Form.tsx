@@ -26,6 +26,7 @@ export default function JobForm() {
 	});
 
 	const [errors, setErrors] = useState<Record<string, string>>({});
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 		setJob({ ...job, [e.target.name]: e.target.value });
@@ -34,19 +35,16 @@ export default function JobForm() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setErrors({});
+		setIsSubmitting(true);
 
-		// Convert dates before validation & submission
 		const formattedJob = {
 			...job,
 			jobPostDate: convertToDDMMYYYY(job.jobPostDate || ""),
 			jobFoundDate: convertToDDMMYYYY(job.jobFoundDate || ""),
-			applicationDate: job.applicationDate
-				? convertToDDMMYYYY(job.applicationDate)
-				: undefined,
+			applicationDate: job.applicationDate ? convertToDDMMYYYY(job.applicationDate) : undefined,
 		};
 
 		const validationResult = jobSchema.safeParse(formattedJob);
-		console.log("validationResult: ", validationResult);
 		if (!validationResult.success) {
 			setErrors(
 				validationResult.error.errors.reduce((acc, error) => {
@@ -54,6 +52,7 @@ export default function JobForm() {
 					return acc;
 				}, {} as Record<string, string>)
 			);
+			setIsSubmitting(false);
 			return;
 		}
 
@@ -61,6 +60,7 @@ export default function JobForm() {
 			const user = FirebaseAuthService.getAuthInstance().currentUser;
 			if (!user) {
 				setErrors({ auth: "You must be signed in to submit a job." });
+				setIsSubmitting(false);
 				return;
 			}
 
@@ -77,14 +77,30 @@ export default function JobForm() {
 			if (response.ok) {
 				alert("Job added successfully!");
 				setErrors({});
+				setJob({
+					company: "",
+					jobLink: "",
+					jobPostDate: "",
+					jobFoundDate: "",
+					applicationDate: "",
+					status: ALLOWED_STATUS[0],
+					connectionName: "",
+					connectionLinkedIn: "",
+					hiringManager: "",
+					hiringManagerLinkedIn: "",
+					jobTitle: ALLOWED_JOB_TITLES[0],
+				});
 			} else {
 				setErrors({ server: "Error submitting the job. Please try again later." });
 			}
 		} catch (error) {
 			console.error("Error:", error);
 			setErrors({ server: "Server is not responding." });
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
+
 
 	return (
 		<div className="max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg mt-10">
@@ -239,7 +255,8 @@ export default function JobForm() {
 					</select>
 				</label>
 
-				<button type="submit" className="bg-blue-500 text-white p-2 rounded">
+				<button type="submit" className="bg-blue-500 text-white p-2 rounded flex items-center justify-center" disabled={isSubmitting}>
+					{isSubmitting ? <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-5 h-5 mr-2"></span> : null}
 					Submit Job
 				</button>
 			</form>
