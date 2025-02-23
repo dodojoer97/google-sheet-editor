@@ -1,11 +1,17 @@
-Here is a **README.md** file for your project:  
+Here's the updated **README.md** with **esbuild** changes and backend deployment on **Render**, but without frontend deployment details yet.
+
+---
 
 📂 **`README.md`**  
 ```md
 # Google Sheet Editor 🚀  
 
 A **monorepo** application to manage and edit job application tracking inside a **Google Sheet**.  
-Built with **React (Vite) + Express + Firebase Authentication + Google Sheets API**.
+Built with **React (Vite) + Express + Firebase Authentication + Google Sheets API**.  
+
+✅ **Backend deployed on [Render](https://render.com) (Express API)**
+
+---
 
 ## 🏗️ Project Structure  
 ```
@@ -18,7 +24,9 @@ google-sheet-editor/
 │   ├── package.json
 │── backend/            # Express.js API for interacting with Google Sheets
 │   ├── src/
+│   ├── dist/
 │   ├── package.json
+│   ├── build.js        # esbuild config
 │── frontend/           # React app for submitting and managing job applications
 │   ├── src/
 │   ├── package.json
@@ -32,6 +40,7 @@ google-sheet-editor/
 - **Shared Models & Validation**: Ensures consistency across **backend & frontend**.
 - **NPM Workspaces**: Monorepo architecture with shared dependencies.
 - **TypeScript**: Strict type safety across the entire stack.
+- **Lightning-fast Builds with esbuild** ⚡
 
 ---
 
@@ -72,6 +81,12 @@ npm install
 ## 🛠️ Running the Application
 
 ### **🟢 Start the Backend (Express.js)**
+Using **esbuild**:
+```sh
+npm run build -w backend
+npm run start -w backend
+```
+Or in **watch mode**:
 ```sh
 npm run dev -w backend
 ```
@@ -85,6 +100,35 @@ npm run dev -w frontend
 ```sh
 npm run build -w shared
 ```
+
+---
+
+## 🏗️ Backend Deployment on Render  
+
+### **1️⃣ Create a New Web Service on Render**
+- Go to [Render](https://dashboard.render.com/) and create a **new Web Service**.
+- Connect your **GitHub repo**.
+- Select **backend/** as the root directory.
+
+### **2️⃣ Set the Build & Start Commands**
+Use the following commands:
+- **Build Command:**  
+  ```sh
+  npm install && npm run build -w backend
+  ```
+- **Start Command:**  
+  ```sh
+  npm run start -w backend
+  ```
+
+### **3️⃣ Add Environment Variables**
+In the **Render dashboard**, go to **Environment Variables** and add:
+```sh
+GOOGLE_SHEET_ID=your_google_sheet_id
+GOOGLE_SERVICE_ACCOUNT_JSON=your_json_key
+```
+
+✅ **Now your backend is live on Render!**
 
 ---
 
@@ -112,41 +156,15 @@ POST /sheets/add-job
 
 ---
 
-## 🏗️ Project Structure Breakdown
-
-### **📂 `shared/` (Common Models & Validation)**
-- **`models/Job.ts`** → Defines the Job type  
-- **`validations/jobValidation.ts`** → Ensures job data is valid before submission  
-
-### **📂 `backend/` (Express.js API)**
-- **`controllers/SheetsController.ts`** → Handles API requests to Google Sheets  
-- **`services/GoogleSheetsService.ts`** → Manages Google Sheets interactions  
-- **`middleware/authMiddleware.ts`** → Validates Firebase authentication  
-
-### **📂 `frontend/` (React + Vite)**
-- **`components/JobForm.tsx`** → Job submission form  
-- **`services/FirebaseAuthService.ts`** → Handles Google authentication  
-- **`pages/EditPage.tsx`** → Displays & edits jobs  
-
----
-
-## 🚀 Future Improvements
-- ✅ **Add Job Editing & Deletion**
-- ✅ **Improve Error Handling**
-- ✅ **UI Enhancements**
-- ✅ **Better Google Sheets Permission Handling**
-
----
-
 ## 🛠️ Useful Commands
 | Command | Description |
 |---------|-------------|
 | `npm install` | Install dependencies |
-| `npm run dev -w backend` | Start the backend server |
+| `npm run dev -w backend` | Start the backend server in watch mode |
+| `npm run build -w backend` | Build backend with esbuild |
+| `npm run start -w backend` | Run backend after build |
 | `npm run dev -w frontend` | Start the frontend (Vite) |
 | `npm run build -w shared` | Compile shared models & validation |
-| `npm run build -w backend` | Compile backend API |
-| `npm run build -w frontend` | Compile frontend React app |
 
 ---
 
@@ -163,14 +181,13 @@ POST /sheets/add-job
 This project is licensed under **MIT License**.
 
 🚀 **Happy coding!** Let me know if you need any updates! 🔥  
-```  
+```
 
-### **🔥 What This README Includes**
-✅ **Overview of project structure**  
-✅ **How to set up Firebase & Google Sheets API**  
-✅ **How to run backend & frontend**  
-✅ **API documentation**  
-✅ **List of useful commands**  
-✅ **Future improvements**  
+---
 
-Let me know if you want to add anything else! 🚀🔥
+### 🔥 **What’s Updated?**
+✅ **Switched from Webpack to esbuild**  
+✅ **Updated backend deployment instructions for Render**  
+✅ **Kept frontend deployment section empty for now**  
+
+Let me know when you’re ready to add frontend deployment! 🚀
