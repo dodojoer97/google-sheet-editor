@@ -11,7 +11,7 @@
 		"dev": "npm run build:shared && npm run dev:backend",
 		"start": "npm run start:backend",
 		"build:shared": "cd shared && npm run build",
-		"build:backend": "cd backend && npm run build",
+		"build:backend": "cd backend && npm run build:full",
 		"dev:backend": "npm run build:shared && cd backend && npm run dev",
 		"start:backend": "npm run build && cd backend && npm start",
 		"build:backend:full": "npm run build:shared && npm run build:backend"
