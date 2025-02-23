@@ -7,13 +7,16 @@
 		"frontend"
 	],
 	"scripts": {
-		"build": "npm run build:shared && npm run build:backend",
+		"build": "npm run build:shared && npm run build:backend && npm run build:frontend",
 		"dev": "npm run build:shared && npm run dev:backend",
 		"start": "npm run start:backend",
 		"build:shared": "cd shared && npm run build",
 		"build:backend": "cd backend && npm run build:full",
+		"build:frontend": "cd frontend && npm run build",
+		"build:frontend:full": "npm run build:shared && npm run build:frontend",
 		"dev:backend": "npm run build:shared && cd backend && npm run dev",
 		"start:backend": "npm run build && cd backend && npm start",
-		"build:backend:full": "npm run build:shared && npm run build:backend"
+		"build:backend:full": "npm run build:shared && npm run build:backend",
+		"build:full": "npm run build:shared && npm run build:backend && npm run build:frontend"
 	}
 }
