@@ -5,20 +5,22 @@
 	"main": "dist/server.js",
 	"type": "commonjs",
 	"scripts": {
-		"build": "tsc",
+		"build:full": "npm run compile && npm run build",
+		"build": "node build.js",
+		"compile": "tsc",
 		"start": "node dist/server.js",
 		"dev": "nodemon",
 		"lint": "eslint . --ext .ts",
 		"format": "prettier --write ."
 	},
 	"dependencies": {
+		"@google-sheet-editor/shared": "*",
 		"cors": "^2.8.5",
 		"dotenv": "^16.4.7",
 		"express": "^4.21.2",
 		"firebase-admin": "^13.1.0",
 		"googleapis": "^144.0.0",
-		"zod": "^3.24.2",
-		"@google-sheet-editor/shared": "*"
+		"zod": "^3.24.2"
 	},
 	"devDependencies": {
 		"@types/cors": "^2.8.17",
@@ -26,6 +28,8 @@
 		"@types/node": "^22.13.1",
 		"@typescript-eslint/eslint-plugin": "^7.8.0",
 		"@typescript-eslint/parser": "^7.8.0",
+		"esbuild": "^0.25.0",
+		"esbuild-node-loader": "^0.8.0",
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-prettier": "^5.1.3",
