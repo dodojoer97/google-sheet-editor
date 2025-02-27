@@ -62,6 +62,56 @@ class GoogleSheetsService {
 			requestBody,
 		});
 	}
+
+		/** ✅ Get sheet metadata - column headers & possible dropdown values */
+		public async getSheetMetadata(): Promise<{ fields: any[] }> {
+			try {
+				// Fetch headers (first row)
+				const headerResponse = await this.sheets.spreadsheets.values.get({
+					spreadsheetId: this.spreadsheetId,
+					range: "Ido!A1:Z1",
+				});
+	
+				const headers = headerResponse.data.values?.[0] || [];
+	
+				// Fetch some sample data to detect dropdown values
+				const dataResponse = await this.sheets.spreadsheets.values.get({
+					spreadsheetId: this.spreadsheetId,
+					range: "Ido!A2:Z50",
+				});
+	
+				const rows = dataResponse.data.values || [];
+	
+				const fieldData = headers.map((header, index) => {
+					const columnValues = rows.map(row => row[index]).filter(Boolean);
+					const uniqueValues = [...new Set(columnValues)].slice(0, 10); // Limit options
+	
+					return {
+						name: header,
+						type: uniqueValues.length > 1 && uniqueValues.length < 10 ? "dropdown" : "text",
+						options: uniqueValues.length > 1 && uniqueValues.length < 10 ? uniqueValues : undefined
+					};
+				});
+	
+				return { fields: fieldData };
+			} catch (error) {
+				throw new Error("Error retrieving sheet metadata: " + error);
+			}
+		}
+	
+		/** ✅ Append new row with dynamic form data */
+		public async submitFormData(formData: Record<string, any>): Promise<void> {
+			const values = Object.values(formData);
+	
+			await this.sheets.spreadsheets.values.append({
+				spreadsheetId: this.spreadsheetId,
+				range: "Ido!A:L",
+				valueInputOption: "RAW",
+				requestBody: { values: [values] },
+			});
+		}
+
+	
 }
 
 export default GoogleSheetsService.getInstance();

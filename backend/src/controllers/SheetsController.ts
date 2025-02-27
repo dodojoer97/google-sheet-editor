@@ -23,6 +23,29 @@ class SheetsController {
 			}
 		}
 	}
+
+	/** ✅ Fetch sheet metadata (fields & dropdown options) */
+	public static async getMetadata(req: Request, res: Response): Promise<void> {
+		try {
+			const metadata = await GoogleSheetsService.getSheetMetadata();
+			res.json(metadata);
+		} catch (error) {
+			console.error("Error retrieving metadata:", error);
+			res.status(500).json({ error: "Failed to fetch sheet metadata" });
+		}
+	}
+
+	/** ✅ Submit form data dynamically */
+	public static async submitForm(req: Request, res: Response): Promise<void> {
+		try {
+			const formData = req.body;
+			await GoogleSheetsService.submitFormData(formData);
+			res.status(201).json({ message: "Data submitted successfully" });
+		} catch (error) {
+			console.error("Error submitting form data:", error);
+			res.status(500).json({ error: "Failed to submit form data" });
+		}
+	}
 }
 
 export default SheetsController;
